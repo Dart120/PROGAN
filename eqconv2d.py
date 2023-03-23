@@ -4,7 +4,7 @@ import torch.nn.init as init
 
 
 class EqConv2D(nn.Module):
-    def __init__(self,in_channels,out_channels,kernel_size,stride,padding):
+    def __init__(self,in_channels,out_channels,kernel_size,stride=1,padding='same'):
         super(EqConv2D, self).__init__()
         self.weights = nn.Parameter(torch.Tensor(size=(out_channels, in_channels, *kernel_size)))
         self.bias = nn.Parameter(torch.Tensor(out_channels))
@@ -22,7 +22,7 @@ class EqConv2D(nn.Module):
         nn.init.normal_(self.weights)
         nn.init.zeros_(self.bias)
     def forward(self,x):
-        out = nn.functional.conv2d(x,self.weights * self.scale,self.bias,1,'same',1,1)
+        out = nn.functional.conv2d(x,self.weights * self.scale,self.bias,self.stride,self.padding,1,1)
         return out
 
 
